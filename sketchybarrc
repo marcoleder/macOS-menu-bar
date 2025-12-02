@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Load
+source "$HOME/.config/sketchybar/colors.sh"
+source "$HOME/.config/sketchybar/icons.sh"
+ITEM_DIR="$HOME/.config/sketchybar/items"
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+
+# Unload
+launchctl unload -F /System/Library/LaunchAgents/com.apple.OSDUIHelper.plist > /dev/null 2>&1 &
+
+##### Bar Appearance #####
+BAR_HEIGHT=20
+BAR_FONT="Hack Nerd Font:Bold:9.0"
+
+# Only on laptop
+if [ "$USER" = "s" ]; then
+	BAR_HEIGHT=32
+	BAR_FONT="Hack Nerd Font:Bold:14.0"
+else
+	BAR_HEIGHT=32
+	BAR_FONT="Hack Nerd Font:Bold:14.0"
+fi
+
+bar=(
+  position=top
+  height=$BAR_HEIGHT
+  blur_radius=20
+  color=$BAR_COLOR
+  corner_radius=0
+  border_width=0
+  shadow=off
+  sticky=on
+  y_offset=0
+  margin=0
+  topmost=window
+  display=main
+)
+
+default=(
+  updates=when_shown
+  icon.font=$BAR_FONT
+  padding_right=40
+  icon.color=0xffffffff
+  label.font=$BAR_FONT
+  label.color=0xffffffff
+)
+sketchybar --bar "${bar[@]}" --default "${default[@]}"
+
+# Notch
+sketchybar --add item left_anchor left --set left_anchor width=0 \
+           --add item q_anchor q --set q_anchor width=10 \
+           --add item e_anchor e --set e_anchor width=10 \
+           --add item right_anchor right --set right_anchor width=0 \
+           --add bracket left_bar left_anchor q_anchor \
+           --add bracket right_bar e_anchor right_anchor
+
+# Left
+#source "$ITEM_DIR/spaces.sh"
+source "$ITEM_DIR/aerospace.sh"
+source "$ITEM_DIR/front_app.sh"
+
+# Notch
+source "$ITEM_DIR/brightness.sh"
+source "$ITEM_DIR/volume.sh"
+
+# Right
+source "$ITEM_DIR/calendar.sh"
+
+# Laptop battery
+if [ "$USER" = "s" ]; then
+  source "$ITEM_DIR/battery.sh"
+#else
+#  source "$ITEM_DIR/adguard.sh"
+fi
+
+source "$ITEM_DIR/ram.sh"
+source "$ITEM_DIR/tailscale.sh"
+source "$ITEM_DIR/lulu.sh"
+source "$ITEM_DIR/docker.sh"
+
+$HOME/.config/wg/adjustBrightness.sh reload
+
+sketchybar --update
