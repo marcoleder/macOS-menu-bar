@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+pkill -f "bd_bridge"
+
 # Load
 source "$HOME/.config/sketchybar/colors.sh"
 source "$HOME/.config/sketchybar/icons.sh"
@@ -78,6 +80,8 @@ source "$ITEM_DIR/ram.sh"
 source "$ITEM_DIR/tailscale.sh"
 source "$ITEM_DIR/lulu.sh"
 source "$ITEM_DIR/docker.sh"
+
+"$HOME/.config/sketchybar/plugins/bd_bridge" &
 
 $HOME/.config/wg/adjustBrightness.sh reload
 
